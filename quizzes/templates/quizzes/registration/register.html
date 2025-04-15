@@ -1,0 +1,27 @@
+{% extends 'quizzes/base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
+            <div class="card shadow border-0 rounded-4" style="background-color: #f2fdfb;">
+                <div class="card-body px-4 py-4">
+                    <h3 class="text-center mb-4" style="color: #1e656d;">Sign Up</h3>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+
+                        <div class="d-grid mt-3">
+                            <button type="submit" class="btn" style="background-color: #f76c6c; color: white; font-weight: 600;">Register</button>
+                        </div>
+                    </form>
+
+                    <div class="text-center mt-3" style="font-size: 0.9rem;">
+                        Already have an account? <a href="{% url 'quizzes:login' %}" style="color: #1e656d;">Login here</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'quizzes/base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4" style="color: #1e656d;">{{ quiz.title }}</h2>
+    <p class="text-center mb-4">Topic: {{ quiz.topic }}</p>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        {% for question in questions %}
+        <div class="card mb-4">
+            <div class="card-header bg-light">
+                <h5>Question {{ forloop.counter }}: {{ question.question_text }}</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="question_{{ question.id }}" value="A" id="q{{ question.id }}_a" required>
+                    <label class="form-check-label" for="q{{ question.id }}_a">A. {{ question.option_a }}</label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="question_{{ question.id }}" value="B" id="q{{ question.id }}_b">
+                    <label class="form-check-label" for="q{{ question.id }}_b">B. {{ question.option_b }}</label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="question_{{ question.id }}" value="C" id="q{{ question.id }}_c">
+                    <label class="form-check-label" for="q{{ question.id }}_c">C. {{ question.option_c }}</label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="question_{{ question.id }}" value="D" id="q{{ question.id }}_d">
+                    <label class="form-check-label" for="q{{ question.id }}_d">D. {{ question.option_d }}</label>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary px-5">Submit Quiz</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

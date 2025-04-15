@@ -1,0 +1,71 @@
+{% extends 'quizzes/base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-gradient bg-primary text-white">
+            <h2 class="mb-0">Quiz Results</h2>
+        </div>
+        <div class="card-body">
+            <h3 class="text-center mb-4">{{ quiz.title }}</h3>
+            
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card bg-light mb-4">
+                        <div class="card-body text-center">
+                            <h4 class="card-title">Your Performance</h4>
+                            
+                            {% with percentage=score|floatformat:0|mul:100|div:total %}
+                            <div class="display-4 mb-3 
+                                {% if percentage >= 80 %}text-success
+                                {% elif percentage >= 60 %}text-info
+                                {% elif percentage >= 40 %}text-warning
+                                {% else %}text-danger{% endif %}">
+                                {{ percentage|floatformat:0 }}%
+                            </div>
+                            
+                            <p class="lead mb-3">Score: <strong>{{ score }}/{{ total }}</strong></p>
+                            
+                            <div class="progress mb-4" style="height: 20px;">
+                                <div class="progress-bar progress-bar-striped 
+                                    {% if percentage >= 80 %}bg-success
+                                    {% elif percentage >= 60 %}bg-info
+                                    {% elif percentage >= 40 %}bg-warning
+                                    {% else %}bg-danger{% endif %}" 
+                                    role="progressbar" 
+                                    style="width: {{ percentage|floatformat:0 }}%;" 
+                                    aria-valuenow="{{ percentage|floatformat:0 }}" 
+                                    aria-valuemin="0" 
+                                    aria-valuemax="100">
+                                    {{ percentage|floatformat:0 }}%
+                                </div>
+                            </div>
+                            {% endwith %}
+                            
+                            <div class="mt-4">
+                                {% if percentage >= 80 %}
+                                    <div class="alert alert-success">Awesome! You've totally nailed this quiz!</div>
+                                {% elif percentage >= 60 %}
+                                    <div class="alert alert-info">Nice job! You've got a solid grasp on the material.</div>
+                                {% elif percentage >= 40 %}
+                                    <div class="alert alert-warning">Not too shabby! A bit more practice will help.</div>
+                                {% else %}
+                                    <div class="alert alert-danger">Don't sweat it! Keep studying, and you'll get there!</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="{% url 'quizzes:home' %}" class="btn btn-primary">
+                            Take Another Quiz
+                        </a>
+                        <a href="{% url 'quizzes:user_scores' %}" class="btn btn-outline-primary">
+                            Check Out All My Scores
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

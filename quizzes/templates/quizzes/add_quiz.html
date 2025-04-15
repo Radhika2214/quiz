@@ -1,0 +1,185 @@
+{% extends "quizzes/base.html" %}
+
+{% block content %}
+<style>
+    .page-title {
+        color: #1e656d;
+        font-weight: 600;
+    }
+    .back-btn {
+        background-color: #f76c6c;
+        color: #fff;
+        border: none;
+    }
+    .back-btn:hover {
+        background-color: #e85a5a;
+    }
+    .card-header-custom {
+        background-color: #e0f7f1;
+        font-weight: 500;
+        color: #155c60;
+    }
+    .btn-add {
+        background-color: #ffb84d;
+        border: none;
+        font-weight: 500;
+    }
+    .btn-add:hover {
+        background-color: #ffaa1a;
+    }
+    .btn-create {
+        background-color: #1e656d;
+        color: white;
+        font-weight: 600;
+        border: none;
+    }
+    .btn-create:hover {
+        background-color: #155c60;
+    }
+    textarea, input[type="text"], select {
+        font-size: 0.95rem;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="page-title">Create a New Quiz</h2>
+        <a href="{% url 'quizzes:admin_dashboard' %}" class="btn back-btn px-3">← Back</a>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST" id="quiz-form">
+        {% csrf_token %}
+        <div class="card mb-4">
+            <div class="card-header card-header-custom">
+                Quiz Info
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Quiz Title</label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="e.g., Earthquake Preparedness" required>
+                </div>
+                <div class="mb-3">
+                    <label for="topic" class="form-label">Category</label>
+                    <input type="text" class="form-control" id="topic" name="topic" placeholder="e.g., Natural Disasters" required>
+                </div>
+            </div>
+        </div>
+
+        <div id="questions-container">
+            <div class="card mb-4 question-card" data-question="1">
+                <div class="card-header card-header-custom d-flex justify-content-between align-items-center">
+                    Question 1
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Question Text</label>
+                        <textarea class="form-control" name="question_1" rows="2" required></textarea>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-6 mb-2">
+                            <input type="text" class="form-control" name="option_a_1" placeholder="Option A" required>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <input type="text" class="form-control" name="option_b_1" placeholder="Option B" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-2">
+                            <input type="text" class="form-control" name="option_c_1" placeholder="Option C" required>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <input type="text" class="form-control" name="option_d_1" placeholder="Option D" required>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Correct Answer</label>
+                        <select class="form-select" name="correct_1" required>
+                            <option value="">-- Select --</option>
+                            <option value="A">Option A</option>
+                            <option value="B">Option B</option>
+                            <option value="C">Option C</option>
+                            <option value="D">Option D</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <button type="button" id="add-question" class="btn btn-add">
+                ➕ Add Question
+            </button>
+        </div>
+
+        <div class="d-grid">
+            <button type="submit" class="btn btn-create btn-lg">Save Quiz</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let questionCounter = 1;
+
+        document.getElementById('add-question').addEventListener('click', function () {
+            questionCounter++;
+
+            const questionTemplate = `
+                <div class="card mb-4 question-card" data-question="${questionCounter}">
+                    <div class="card-header card-header-custom d-flex justify-content-between align-items-center">
+                        Question ${questionCounter}
+                        <button type="button" class="btn btn-sm btn-danger remove-question">Remove</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Question Text</label>
+                            <textarea class="form-control" name="question_${questionCounter}" rows="2" required></textarea>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-6 mb-2">
+                                <input type="text" class="form-control" name="option_a_${questionCounter}" placeholder="Option A" required>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <input type="text" class="form-control" name="option_b_${questionCounter}" placeholder="Option B" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-2">
+                                <input type="text" class="form-control" name="option_c_${questionCounter}" placeholder="Option C" required>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <input type="text" class="form-control" name="option_d_${questionCounter}" placeholder="Option D" required>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Correct Answer</label>
+                            <select class="form-select" name="correct_${questionCounter}" required>
+                                <option value="">-- Select --</option>
+                                <option value="A">Option A</option>
+                                <option value="B">Option B</option>
+                                <option value="C">Option C</option>
+                                <option value="D">Option D</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const container = document.getElementById('questions-container');
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = questionTemplate;
+            container.appendChild(tempDiv.firstElementChild);
+
+            tempDiv.querySelector('.remove-question').addEventListener('click', function () {
+                this.closest('.question-card').remove();
+            });
+        });
+    });
+</script>
+{% endblock %}

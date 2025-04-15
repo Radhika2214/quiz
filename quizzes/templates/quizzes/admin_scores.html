@@ -1,0 +1,70 @@
+{% extends "quizzes/base.html" %}
+
+{% block content %}
+<style>
+    .page-title {
+        color: #1e656d;
+        font-weight: 600;
+    }
+    .back-btn {
+        background-color: #f76c6c;
+        color: white;
+        border: none;
+    }
+    .back-btn:hover {
+        background-color: #e85a5a;
+    }
+    .table thead {
+        background-color: #1e656d;
+        color: white;
+    }
+    .table tbody tr:hover {
+        background-color: #f3f3f3;
+    }
+    .alert-info {
+        background-color: #e0f7f1;
+        color: #155c60;
+        border: 1px solid #c6eee6;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="page-title">User Quiz Scores</h2>
+        <a href="{% url 'quizzes:admin_dashboard' %}" class="btn back-btn px-3">← Back</a>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    {% if attempts %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Quiz</th>
+                        <th>Score</th>
+                        <th>Date Taken</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for attempt in attempts %}
+                        <tr>
+                            <td>{{ attempt.user.username }}</td>
+                            <td>{{ attempt.quiz.title }}</td>
+                            <td>{{ attempt.score }}</td>
+                            <td>{{ attempt.date_taken|date:"M d, Y H:i" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center">No quiz attempts recorded yet.</div>
+    {% endif %}
+</div>
+{% endblock %}

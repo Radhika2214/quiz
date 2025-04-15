@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #fefefe;
+        }
+        .dash-header {
+            color: #1e656d;
+            font-weight: 600;
+        }
+        .logout-btn {
+            background-color: #f76c6c;
+            color: white;
+            border: none;
+        }
+        .logout-btn:hover {
+            background-color: #e85a5a;
+        }
+        .card-title {
+            font-weight: 500;
+        }
+        .custom-card {
+            background-color: #e0f7f1;
+            border: 1px solid #d1f0e7;
+        }
+        .custom-card .btn {
+            background-color: #1e656d;
+            color: white;
+            font-weight: 500;
+            border: none;
+        }
+        .custom-card .btn:hover {
+            background-color: #155c60;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="dash-header">Admin Dashboard</h2>
+        <a href="{% url 'quizzes:logout' %}" class="btn logout-btn px-3">Logout</a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <div class="card custom-card h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Add a New Quiz</h5>
+                    <a href="{% url 'quizzes:add_quiz' %}" class="btn w-100 mt-2">Create</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card custom-card h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Edit or Delete Quizzes</h5>
+                    <a href="{% url 'quizzes:edit_quiz' %}" class="btn w-100 mt-2">Manage</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card custom-card h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">View User Scores</h5>
+                    <a href="{% url 'quizzes:user_scores' %}" class="btn w-100 mt-2">See Scores</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
